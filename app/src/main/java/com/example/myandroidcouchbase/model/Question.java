@@ -1,8 +1,14 @@
 package com.example.myandroidcouchbase.model;
 
+import com.couchbase.lite.Database;
+import com.couchbase.lite.Emitter;
+import com.couchbase.lite.Mapper;
+import com.couchbase.lite.Query;
+import com.couchbase.lite.View;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
+import java.util.Map;
 
 public class Question {
 
@@ -74,4 +80,26 @@ public class Question {
     public void set_attachments(String _attachments) {
         this._attachments = _attachments;
     }
+
+
+    public static Query getQuestions(Database database) {
+        // 1
+        View view = database.getView("app/questions");
+        if (view.getMap() == null) {
+            // 2
+            view.setMap(new Mapper() {
+                @Override
+                // 3
+                public void map(Map<String, Object> document, Emitter emitter) {
+                    // 4
+                    if (document.get("type").equals("question")) {
+                        emitter.emit(document.get("_id"), null);
+                    }
+                }
+            }, "1");
+        }
+        Query query = view.createQuery();
+        return query;
+    }
+
 }
