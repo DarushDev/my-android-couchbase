@@ -1,9 +1,11 @@
 package com.example.myandroidcouchbase;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.couchbase.lite.CouchbaseLiteException;
 import com.couchbase.lite.Document;
@@ -50,6 +52,15 @@ public class HomeActivity extends AppCompatActivity {
         final HomeAdapter adapter = new HomeAdapter(data);
         mRecyclerView.setAdapter(adapter);
 
+        adapter.setOnItemClickListener(new HomeAdapter.OnItemClickListener() {
+            @Override
+            public void OnClick(View view, int position) {
+                Intent intent = new Intent(getApplicationContext(), QuestionActivity.class);
+                Question selected = adapter.getQuestions().get(position);
+                intent.putExtra(EXTRA_INTENT_ID, selected.get_id());
+                startActivity(intent);
+            }
+        });
 
     }
 
