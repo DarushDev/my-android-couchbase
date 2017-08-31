@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.couchbase.lite.Document;
 import com.example.myandroidcouchbase.adapter.QuestionOptionsAdapter;
+import com.example.myandroidcouchbase.model.Answer;
 import com.example.myandroidcouchbase.model.Question;
 
 public class QuestionActivity extends AppCompatActivity {
@@ -59,4 +60,8 @@ public class QuestionActivity extends AppCompatActivity {
 
     }
 
+    public void onButtonClicked(View view) {
+        Answer answer = new Answer(mQuestion.get_id(), "answer", mQuestion.getOptions().get(mSelectedOption));
+        ModelHelper.save(DataManager.getSharedInstance(getApplicationContext()).database, answer);
+    }
 }
