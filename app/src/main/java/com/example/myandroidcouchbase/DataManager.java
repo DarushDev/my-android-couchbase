@@ -15,6 +15,8 @@ import com.couchbase.lite.replicator.Replication;
 import com.couchbase.lite.util.ZipUtils;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class DataManager {
 
@@ -37,7 +39,7 @@ public class DataManager {
             e.printStackTrace();
         }
 
-// 3
+        // 3
         if (database == null) {
             try {
                 ZipUtils.unzip(context.getAssets().open("quizzdroid.cblite2.zip"), manager.getContext().getFilesDir());
@@ -58,6 +60,25 @@ public class DataManager {
 
         Thread thread = new Thread(liteListener);
         thread.start();
+
+        // 1
+        URL syncGatewayURL = null;
+        try {
+            String SYNC_GATEWAY_URL = "http://localhost:4984/quizzdroid";
+            syncGatewayURL = new URL(SYNC_GATEWAY_URL);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        // 2
+        mPush = database.createPushReplication(syncGatewayURL);
+        mPush.setContinuous(true);
+        mPush.start();
+
+        // 3
+        mPull = database.createPullReplication(syncGatewayURL);
+        mPull.setContinuous(true);
+        mPull.start();
 
     }
 
