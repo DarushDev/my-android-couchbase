@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.couchbase.lite.Attachment;
 import com.couchbase.lite.CouchbaseLiteException;
 import com.couchbase.lite.Document;
+import com.couchbase.lite.LiveQuery;
 import com.couchbase.lite.Query;
 import com.couchbase.lite.QueryEnumerator;
 import com.couchbase.lite.QueryRow;
@@ -91,6 +92,7 @@ public class QuestionActivity extends AppCompatActivity {
             mImageQuestion.setImageDrawable(drawable);
         }
 
+        showAnswers();
     }
 
     public void onButtonClicked(View view) {
@@ -113,6 +115,33 @@ public class QuestionActivity extends AppCompatActivity {
         }
 
         return answerCounts;
+    }
+
+    private void showAnswers() {
+        DataManager manager = DataManager.getSharedInstance(getApplicationContext());
+        Query answersQuery = Answer.getAnswersForQuestion(manager.database, mQuestion.get_id());
+        LiveQuery liveQuery = answersQuery.toLiveQuery();
+
+        liveQuery.addChangeListener(new LiveQuery.ChangeListener() {
+            @Override
+            public void changed(LiveQuery.ChangeEvent event) {
+                QueryEnumerator result = event.getRows();
+
+                Map<String,Integer> counts = getAnswerCounts(result);
+
+                final QuestionOptionsAdapter adapter = (QuestionOptionsAdapter)mQuestionOptions.getAdapter();
+
+                adapter.setAnswerCounts(counts);
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+            }
+        });
+        liveQuery.start();
     }
 
 }
