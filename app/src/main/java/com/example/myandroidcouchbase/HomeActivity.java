@@ -7,19 +7,19 @@ import android.support.v7.widget.RecyclerView;
 
 public class HomeActivity extends AppCompatActivity {
 
-  public static String EXTRA_INTENT_ID = "id";
-  private RecyclerView mRecyclerView;
+    public static String EXTRA_INTENT_ID = "id";
+    private RecyclerView mRecyclerView;
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_home);
-    mRecyclerView = (RecyclerView) findViewById(R.id.rvQuestions);
-    mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_home);
+        mRecyclerView = (RecyclerView) findViewById(R.id.rvQuestions);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 
-    DataManager manager = DataManager.getSharedInstance(getApplicationContext());
+        DataManager manager = DataManager.getSharedInstance(getApplicationContext());
 
-  }
+    }
 
 }

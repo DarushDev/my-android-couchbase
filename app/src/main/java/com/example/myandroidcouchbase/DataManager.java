@@ -5,7 +5,12 @@ import android.content.Context;
 import com.couchbase.lite.CouchbaseLiteException;
 import com.couchbase.lite.Database;
 import com.couchbase.lite.Manager;
+import com.couchbase.lite.View;
 import com.couchbase.lite.android.AndroidContext;
+import com.couchbase.lite.javascript.JavaScriptReplicationFilterCompiler;
+import com.couchbase.lite.javascript.JavaScriptViewCompiler;
+import com.couchbase.lite.listener.Credentials;
+import com.couchbase.lite.listener.LiteListener;
 import com.couchbase.lite.replicator.Replication;
 import com.couchbase.lite.util.ZipUtils;
 
@@ -44,6 +49,16 @@ public class DataManager {
         e.printStackTrace();
       }
     }
+
+    View.setCompiler(new JavaScriptViewCompiler());
+    Database.setFilterCompiler(new JavaScriptReplicationFilterCompiler());
+
+    Credentials credentials = new Credentials(null, null);
+    LiteListener liteListener = new LiteListener(manager, 5984, credentials);
+
+    Thread thread = new Thread(liteListener);
+    thread.start();
+
   }
 
   public static DataManager getSharedInstance(Context context) {
