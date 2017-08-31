@@ -17,6 +17,9 @@ public class HomeActivity extends AppCompatActivity {
     mRecyclerView = (RecyclerView) findViewById(R.id.rvQuestions);
     mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+
+    DataManager manager = DataManager.getSharedInstance(getApplicationContext());
+
   }
 
 }
