@@ -1,5 +1,18 @@
 package com.example.myandroidcouchbase.model;
 
+import com.couchbase.lite.Database;
+import com.couchbase.lite.Emitter;
+import com.couchbase.lite.Mapper;
+import com.couchbase.lite.Query;
+import com.couchbase.lite.Reducer;
+import com.couchbase.lite.View;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class Answer {
 
     private String _id;
@@ -53,4 +66,32 @@ public class Answer {
     public void setUser_answer(String user_answer) {
         this.user_answer = user_answer;
     }
+
+    public static Query getAnswersForQuestion(Database database, String questionId) {
+        View view = database.getView("app/answers");
+        if (view.getMap() == null) {
+            view.setMapReduce(new Mapper() {
+                @Override
+                public void map(Map<String, Object> document, Emitter emitter) {
+                    if (document.get("type").equals("answer")) {
+                        List<Object> keys = new ArrayList<>();
+                        keys.add((String) document.get("question_id"));
+                        keys.add((String) document.get("user_answer"));
+                        emitter.emit(keys, null);
+                    }
+                }
+            }, new Reducer() {
+                @Override
+                public Object reduce(List<Object> keys, List<Object> values, boolean rereduce) {
+                    return values.size();
+                }
+            }, "1");
+        }
+        Query query = view.createQuery();
+        query.setGroupLevel(2);
+        query.setStartKey(Arrays.asList(questionId));
+        query.setEndKey(Arrays.asList(questionId, new HashMap<String, Object>()));
+        return query;
+    }
+
 }
