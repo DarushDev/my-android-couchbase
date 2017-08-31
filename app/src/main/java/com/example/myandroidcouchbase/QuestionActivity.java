@@ -1,6 +1,7 @@
 package com.example.myandroidcouchbase;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -10,10 +11,15 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.couchbase.lite.Attachment;
+import com.couchbase.lite.CouchbaseLiteException;
 import com.couchbase.lite.Document;
+import com.couchbase.lite.Revision;
 import com.example.myandroidcouchbase.adapter.QuestionOptionsAdapter;
 import com.example.myandroidcouchbase.model.Answer;
 import com.example.myandroidcouchbase.model.Question;
+
+import java.io.InputStream;
 
 public class QuestionActivity extends AppCompatActivity {
 
@@ -57,6 +63,19 @@ public class QuestionActivity extends AppCompatActivity {
                 mSelectedOption = position;
             }
         });
+
+        Revision revision = document.getCurrentRevision();
+        Attachment attachment = revision.getAttachment("image");
+        if (attachment != null) {
+            InputStream is = null;
+            try {
+                is = attachment.getContent();
+            } catch (CouchbaseLiteException e) {
+                e.printStackTrace();
+            }
+            Drawable drawable = Drawable.createFromStream(is, "image");
+            mImageQuestion.setImageDrawable(drawable);
+        }
 
     }
 
