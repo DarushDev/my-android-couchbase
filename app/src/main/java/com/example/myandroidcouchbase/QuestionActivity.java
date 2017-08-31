@@ -10,21 +10,21 @@ import com.example.myandroidcouchbase.model.Question;
 
 public class QuestionActivity extends AppCompatActivity {
 
-  private TextView mTextView;
-  private GridView mQuestionOptions;
-  private ImageView mImageQuestion;
+    private TextView mTextView;
+    private GridView mQuestionOptions;
+    private ImageView mImageQuestion;
 
-  private int mSelectedOption;
-  private Question mQuestion;
+    private int mSelectedOption;
+    private Question mQuestion;
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_question);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_question);
 
-    mTextView = (TextView) findViewById(R.id.question_view);
-    mImageQuestion = (ImageView) findViewById(R.id.imageQuestion);
+        mTextView = (TextView) findViewById(R.id.question_view);
+        mImageQuestion = (ImageView) findViewById(R.id.imageQuestion);
 
-  }
+    }
 
 }
