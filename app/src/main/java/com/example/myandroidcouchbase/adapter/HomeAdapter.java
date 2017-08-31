@@ -2,6 +2,7 @@ package com.example.myandroidcouchbase.adapter;
 
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,7 +37,37 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        // missing code
+        // 1
+        Question question = mQuestions.get(position);
+
+        // 2
+        switch (question.getTag()) {
+            case "science":
+                holder.itemView.setBackgroundColor(Color.parseColor("#EC5766"));
+                break;
+            case "geography":
+                holder.itemView.setBackgroundColor(Color.parseColor("#FFC857"));
+                break;
+            case "android":
+                holder.itemView.setBackgroundColor(Color.parseColor("#63ADF2"));
+                break;
+            case "logic":
+                holder.itemView.setBackgroundColor(Color.parseColor("#86CD82"));
+        }
+
+        // 3
+        holder.mQuestion.setText(question.getText());
+        holder.mTag.setText(question.getTag());
+
+        // 4
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mOnItemClickListener != null) {
+                    mOnItemClickListener.OnClick(v, position);
+                }
+            }
+        });
     }
 
     @Override
