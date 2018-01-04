@@ -3,8 +3,8 @@ Develop a crowd-sourcing quiz application. Your answers will be shared (via Sync
 
 ![Image](./app/src/main/assets/screenshot1.gif)
 
-Libraries used:
+### Libraries used:
 - [Couchbase-Lite-Android](https://github.com/couchbase/couchbase-lite-android)
 
-Tutorial:
-- https://www.raywenderlich.com/134752/couchbase-tutorial-android
+### Credits:
+- [Raywenderlich](https://www.raywenderlich.com/134752/couchbase-tutorial-android)
